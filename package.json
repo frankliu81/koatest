@@ -1,0 +1,23 @@
+{
+  "name": "koatest",
+  "version": "1.0.0",
+  "description": "Some koa test",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/frankliu81/koatest.git"
+  },
+  "author": "Frank Liu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frankliu81/koatest/issues"
+  },
+  "homepage": "https://github.com/frankliu81/koatest#readme",
+  "dependencies": {
+    "koa": "^1.2.0",
+    "koa-router": "^5.4.0"
+  }
+}
