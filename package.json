@@ -18,6 +18,7 @@
   "homepage": "https://github.com/frankliu81/koatest#readme",
   "dependencies": {
     "koa": "^1.2.0",
-    "koa-router": "^5.4.0"
+    "koa-router": "^5.4.0",
+    "mongoose": "^4.5.2"
   }
 }
