@@ -1,13 +1,13 @@
 var koa = require('koa');
 var co = require('co');
-var parsedMusicJSON = require('./music.json');
-var Song = require('./models/song');
 
 // models
+var Song = require('./models/song');
+
 var mongoose = require('mongoose');
 // mongoose
-//var connection = mongoose.connect(process.env.MONGOLAB_URI || "mongodb://localhost/test");
-var connection = mongoose.connect('localhost/test');
+//var connection = mongoose.connect('localhost/test');
+
 // Define an example schema
 var Bear = mongoose.model( 'bears', new mongoose.Schema({
     name:           String,
@@ -57,52 +57,29 @@ app.use(function *() {
   this.body = 'Hello World'
 });
 
-// var loadMusicJSONIntoDB = function() {
-//   console.log("loadMusicJSONIntoDB");
-//   //console.log(parsedMusicJSON);
-//   for (var key in parsedMusicJSON) {
-//     if (parsedMusicJSON.hasOwnProperty(key)) {
-//       //console.log(key + " -> " + parsedMusicJSON[key]);
-//       //console.log(record);
-//       Song.findOne({name: key}, function(err, result) {
-//         if (err) { /* handle err */ }
-//         // the record exists
-//         console.log(result);
-//         if (result) {
-//           /* do nothing */
-//         } else { // create record
-//           var record = { name: key, tags: parsedMusicJSON[key]};
-//           Song.create(record, function(err, record) {
-//             if (err) { console.log(err); }
-//             console.log(record);
-//           });
-//         }
-//       });
-//     }
-//   }
-// };
-// loadMusicJSONIntoDB();
-
-
 function *loadMusicJSONIntoDB() {
-  console.log("loadMusicJSONIntoDB");
+  //console.log("loadMusicJSONIntoDB");
+  var parsedMusicJSON = require('./music.json');
   //console.log(parsedMusicJSON);
   try {
+    songs = yield mongoose.connection.db.listCollections({name: 'songs'}).next()
+    console.log(songs);
+    // if the song collection doesn't exist
+    if (!songs)
+    {
+      for (var key in parsedMusicJSON) {
+        if (parsedMusicJSON.hasOwnProperty(key)) {
+          console.log(key + " -> " + parsedMusicJSON[key]);
 
-    for (var key in parsedMusicJSON) {
-      if (parsedMusicJSON.hasOwnProperty(key)) {
-        console.log(key + " -> " + parsedMusicJSON[key]);
-        result = yield Song.findOne({name: key});
-        // the record exists
-        //console.log(result);
-        if (result) {
-          /* do nothing */
-        } else { // create record
+          //result = yield Song.findOne({name: key});
+          //console.log(result);
+          //if (!result) { // create record
           var record = { name: key, tags: parsedMusicJSON[key]};
           console.log(record);
           yield Song.create(record);
-        }
+          //}
 
+        }
       }
     }
 
@@ -114,10 +91,9 @@ function *loadMusicJSONIntoDB() {
 };
 
 co(function*() {
+  yield mongoose.connect('localhost/test');
   yield loadMusicJSONIntoDB;
   app.listen(3001, function() { console.log('listening on 3001') });
 }).catch(function(err) {
   console.error('Server boot failed:', err, err.stack);
 });
-
-//app.listen(3001);
