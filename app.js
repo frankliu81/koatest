@@ -1,18 +1,17 @@
 var koa = require('koa');
 var co = require('co');
-
-// models
-var Song = require('./models/song');
-
 var mongoose = require('mongoose');
 // mongoose
 //var connection = mongoose.connect('localhost/test');
 
+// models
+var Song = require('./models/song');
+
 // Define an example schema
-var Bear = mongoose.model( 'bears', new mongoose.Schema({
-    name:           String,
-    description:    String
-}));
+// var Bear = mongoose.model( 'bears', new mongoose.Schema({
+//     name:           String,
+//     description:    String
+// }));
 
 
 // routes
@@ -36,20 +35,20 @@ app.use(function *(next) {
 // create a bear and displaying them
 app.use(function *(){
     // Create a new bear
-    var bear = new Bear();
-
-    bear.name = "Great White Bear";
-    bear.description = "A wonderful creature.";
-
-    // Save the bear
-    yield bear.save();
-
-    // Query for all bears
-    var bears = yield Bear.find({})
-    var songs = yield Song.find({});
-
+    // var bear = new Bear();
+    //
+    // bear.name = "Great White Bear";
+    // bear.description = "A wonderful creature.";
+    //
+    // // Save the bear
+    // yield bear.save();
+    //
+    // // Query for all bears
+    // var bears = yield Bear.find({})
     // Set bears as JSON response
     //this.body = bears;
+
+    var songs = yield Song.find({});
     this.body = songs;
 });
 
@@ -62,7 +61,7 @@ function *loadMusicJSONIntoDB() {
   var parsedMusicJSON = require('./music.json');
   //console.log(parsedMusicJSON);
   try {
-    songs = yield mongoose.connection.db.listCollections({name: 'songs'}).next()
+    songs = yield mongoose.connection.db.listCollections({name: 'songs'}).next();
     console.log(songs);
     // if the song collection doesn't exist
     if (!songs)
@@ -85,14 +84,43 @@ function *loadMusicJSONIntoDB() {
 
   } catch (err) {
     console.log(err);
-
   }
+};
 
+function *loadUsersIntoDB() {
+
+  var parsedUserJSON = require('./users.json');
+  try {
+    users = yield mongoose.connection.db.listCollections({name: 'users'}).next();
+    console.log(users);
+    // if the song collection doesn't exist
+    if (!users)
+    {
+      for (var key in parsedUserJSON) {
+        if (parsedUserJSON.hasOwnProperty(key)) {
+          console.log(key + " -> " + parsedUserJSON[key]);
+
+          //result = yield Song.findOne({name: key});
+          //console.log(result);
+          //if (!result) { // create record
+          var record = { name: key};
+          console.log(record);
+          yield User.create(record);
+          //}
+
+        }
+      }
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 co(function*() {
-  yield mongoose.connect('localhost/test');
+  yield mongoose.connect('localhost/TestSongRecommender');
   yield loadMusicJSONIntoDB;
+  yield loadUsersIntoDB;
   app.listen(3001, function() { console.log('listening on 3001') });
 }).catch(function(err) {
   console.error('Server boot failed:', err, err.stack);

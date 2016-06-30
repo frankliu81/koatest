@@ -4,11 +4,11 @@ var autoIncrement  = require('mongoose-auto-increment');
 
 autoIncrement.initialize(mongoose);
 
-var SongSchema = new Schema({
+var UserSchema = new Schema({
   name: String,
-  tags: []
+  songs : [{ type: Number, ref: 'Song' }]
 });
 
-SongSchema.plugin(autoIncrement.plugin, "Song");
+UserSchema.plugin(autoIncrement.plugin, "User");
 
-module.exports = mongoose.model("Song", SongSchema);
+module.exports = mongoose.model("User", UserSchema);
