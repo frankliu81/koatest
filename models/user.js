@@ -6,7 +6,7 @@ autoIncrement.initialize(mongoose);
 
 var UserSchema = new Schema({
   name: String,
-  songs : [{ type: Number, ref: 'Song' }]
+  _songs : [{ type: Number, ref: 'Song' }]
 });
 
 UserSchema.plugin(autoIncrement.plugin, "User");

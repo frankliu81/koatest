@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 //var connection = mongoose.connect('localhost/test');
 
 // models
+var User = require('./models/user');
 var Song = require('./models/song');
 
 // Define an example schema
@@ -18,11 +19,13 @@ var Song = require('./models/song');
 var follows         = require('./routes/follows');
 var listens         = require('./routes/listens');
 var recommendations = require('./routes/recommendations');
+var users           = require('./routes/users');
 var app = koa();
 
 app.use(follows.routes());
 app.use(listens.routes());
 app.use(recommendations.routes());
+app.use(users.routes());
 
 // logger
 app.use(function *(next) {
@@ -32,8 +35,7 @@ app.use(function *(next) {
   console.log('%s %s - %s', this.method, this.url, ms)
 });
 
-// create a bear and displaying them
-app.use(function *(){
+// app.use(function *(){
     // Create a new bear
     // var bear = new Bear();
     //
@@ -48,9 +50,9 @@ app.use(function *(){
     // Set bears as JSON response
     //this.body = bears;
 
-    var songs = yield Song.find({});
-    this.body = songs;
-});
+    //var songs = yield Song.find({});
+    //this.body = songs;
+// });
 
 app.use(function *() {
   this.body = 'Hello World'
@@ -83,7 +85,7 @@ function *loadMusicJSONIntoDB() {
     }
 
   } catch (err) {
-    console.log(err);
+    console.log("ERROR: " + err);
   }
 };
 
