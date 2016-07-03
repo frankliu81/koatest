@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/frankliu81/koatest#readme",
   "dependencies": {
+    "chai": "^3.5.0",
     "koa": "^1.2.0",
     "koa-router": "^5.4.0",
+    "mocha": "^2.5.3",
     "mongoose": "^4.5.2",
     "mongoose-auto-increment": "^5.0.1"
   }
