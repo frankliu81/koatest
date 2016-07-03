@@ -1,19 +1,12 @@
-var assert = require('chai').assert;
-var expected, current;
-before(function(){
-  expected = ['a', 'b', 'c'];
-})
-describe('String#split', function(){
-  beforeEach(function(){
-   current = 'a,b,c'.split(',');
+var request = require('superagent');
+var expect = require('expect.js');
+
+describe('users', function(){
+  it('should respond to GET',function(){
+    request
+      .get('http://localhost:3001/users')
+      .end(function(res){
+        expect(res.status).to.equal(200);
+    })
   })
-  it('should return an array', function(){
-    assert(Array.isArray(current));
-  });
-  it('should return the same array', function({
-    assert.equal(expected.length, current.length, 'arrays have equal length');
-    for (var i=0; i<expected.length; i++) {
-      assert.equal(expected[i], current[i], i + 'element is equal');
-    }
-  })
-})
+});
