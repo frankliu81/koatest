@@ -4,7 +4,8 @@ var utilityHelpers = require('../helpers/utilityHelpers');
 
 router.get('/users', function* () {
   var users = yield User.find({})
-    .populate('_songs');
+  //  .populate('_songs');
+  console.log(users);
   userIndex = utilityHelpers.findWithAttr(users, '_id', 3)
   console.log(users[userIndex]["name"]);
   console.log(users[userIndex]["_songs"]);
