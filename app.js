@@ -64,7 +64,7 @@ function *loadMusicJSONIntoDB() {
   //console.log(parsedMusicJSON);
   try {
     songs = yield mongoose.connection.db.listCollections({name: 'songs'}).next();
-    console.log(songs);
+    //console.log(songs);
     // if the song collection doesn't exist
     if (!songs)
     {
@@ -76,7 +76,7 @@ function *loadMusicJSONIntoDB() {
           //console.log(result);
           //if (!result) { // create record
           var record = { name: key, tags: parsedMusicJSON[key]};
-          console.log(record);
+          //console.log(record);
           yield Song.create(record);
           //}
 
@@ -94,7 +94,7 @@ function *loadUsersIntoDB() {
   var parsedUserJSON = require('./users.json');
   try {
     users = yield mongoose.connection.db.listCollections({name: 'users'}).next();
-    console.log(users);
+    //console.log(users);
     // if the song collection doesn't exist
     if (!users)
     {
@@ -106,7 +106,7 @@ function *loadUsersIntoDB() {
           //console.log(result);
           //if (!result) { // create record
           var record = { name: key};
-          console.log(record);
+          //console.log(record);
           yield User.create(record);
           //}
 

@@ -9,6 +9,10 @@ var SongSchema = new Schema({
   tags: []
 });
 
-SongSchema.plugin(autoIncrement.plugin, "Song");
+//SongSchema.plugin(autoIncrement.plugin, "Song");
+SongSchema.plugin(autoIncrement.plugin, {
+  model: "Song",
+  startAt: 1
+});
 
 module.exports = mongoose.model("Song", SongSchema);
