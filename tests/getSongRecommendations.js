@@ -111,4 +111,24 @@ describe('song recommendations', function(){
     });
   });
 
+  it('returns the recommendations for user id 1 ', function(done){
+    apiRequestURL = baseURL + "/recommendations?user=1";
+    console.log(apiRequestURL);
+    request
+        .get(apiRequestURL)
+        .end(function(err, res){
+          if (err)
+          {
+            console.log("ERROR: " + err);
+            return;
+          }
+          console.log("Recommendations: ")
+          console.log(res.body);
+          expect(res.status).to.equal(200);
+          // expect.js eql works with objects
+          expect(res.body).to.eql({ list: [ '9', '3', '4', '7', '10' ]});
+          done();
+        });
+  });
+
 });
