@@ -28,7 +28,7 @@ describe('song recommendations', function(){
   // });
 
   function runSongQuery(user) {
-    return function (songName, smallback) {
+    return function (songName, callback) {
     //console.log(songName);
       var songQuery = Song.findOne({'name': songName}).exec()
       songQuery.then(function(song){
@@ -42,13 +42,19 @@ describe('song recommendations', function(){
         request
             .post(api_request)
             .end(function(err, res){
+              if (err)
+              {
+                console.log("ERROR: " + err);
+                callback();
+                return;
+              }
               expect(res.status).to.equal(200);
-              smallback()
+              callback()
             });
 
       });
     }
-}
+  }
 
   it('adds the songs the users listen to', function(done){
     var parsedListenJSON = require('../listen.json')["userIds"];
@@ -83,10 +89,10 @@ describe('song recommendations', function(){
           followeeQuery.then(function(followee){
             //console.log("user_id: " + user["_id"]);
             //console.log("followee_id: " + followee["_id"]);
-            api_request = baseURL + "/follow/" + user["_id"] + "/" + followee["_id"];
-            console.log(api_request);
+            apiRequestURL = baseURL + "/follow/" + user["_id"] + "/" + followee["_id"];
+            console.log(apiRequestURL);
             request
-                .post(api_request)
+                .post(apiRequestURL)
                 .end(function(err, res){
                   if (err)
                   {
@@ -101,8 +107,8 @@ describe('song recommendations', function(){
         });
 
     }, function allUserNames(err) {
-      done()
-    })
-  })
+      done();
+    });
+  });
 
 });
